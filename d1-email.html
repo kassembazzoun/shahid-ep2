@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>alpmail - Posteingang</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ .wm{position:absolute;inset:0;display:flex;flex-direction:column;font:13px Arial,Helvetica,sans-serif;color:#222}
+ .wm-top{height:46px;background:#1d4f86;color:#fff;display:flex;align-items:center;padding:0 16px;gap:22px}
+ .wm-top b{font:bold 22px Georgia,serif;letter-spacing:.5px}
+ .wm-top span{font-size:12px;color:#c9daec}
+ .wm-body{flex:1;display:flex}
+ .wm-left{width:180px;background:#eef3f8;border-right:1px solid #c6d3e0;padding:12px 0}
+ .wm-left div{padding:6px 16px}
+ .wm-left .on{background:#d5e3f2;font-weight:bold}
+ .wm-main{flex:1;padding:12px 18px;overflow:hidden}
+ .hdr{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:12px}
+ .hdr td{padding:3px 6px;border-bottom:1px solid #e3e8ee}
+ .hdr td.k{color:#666;width:90px}
+ .msg{font:14px/20px Arial,sans-serif;white-space:pre-wrap}
+ #lnk{color:#0645ad;text-decoration:underline;cursor:pointer}
+ .mark{outline:3px solid #e00;outline-offset:2px}
+ .btns{margin-bottom:10px;display:flex;gap:6px}
+ .btns span{border:1px solid #9fb2c6;background:linear-gradient(#fff,#e2e9f1);padding:3px 10px;font-size:12px}
+</style></head><body>
+<div class="stage" id="s" data-w="1280" data-h="720" style="width:1280px;height:720px">
+ <div class="recon" style="left:200px;top:640px;z-index:900">Typical of Swiss card phishing in 2011-2012 (MELANI reports). Not from the case file. All names fictional.</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/ff.js"></script><script src="assets/sim.js"></script>
+<script>
+var page=buildFF($('#s'),{host:'',url:'http://mail.alpmail.example/mail/read?id=48213',tab:'alpmail - Posteingang (3)'});
+page.innerHTML='<div class="wm"><div class="wm-top"><b>alpmail</b><span>anna.muster@alpmail.example</span><span style="margin-left:auto">Abmelden</span></div>'+
+ '<div class="wm-body"><div class="wm-left"><div class="on">Posteingang (3)</div><div>Entw&uuml;rfe</div><div>Gesendet</div><div>Spam</div><div>Papierkorb</div></div>'+
+ '<div class="wm-main"><div class="btns"><span>Antworten</span><span>Weiterleiten</span><span>L&ouml;schen</span><span>Spam</span></div>'+
+ '<table class="hdr"><tr><td class="k">Von:</td><td>NordAlp Card &lt;info@nordalp-card.example&gt;</td><td class="k">Gesendet:</td><td>Di 15.11.2011 09:42</td></tr>'+
+ '<tr><td class="k">An:</td><td>anna.muster@alpmail.example</td><td class="k">Priorit&auml;t:</td><td>normale</td></tr>'+
+ '<tr><td class="k">Antwort an:</td><td><span id="rt">nordalpcard@freemail.example</span></td><td class="k">Typ:</td><td>HTML</td></tr>'+
+ '<tr><td class="k">Betreff:</td><td colspan="3"><b>Aktualisieren Sie Ihre Account-Informationen1</b></td></tr></table>'+
+ '<div class="msg">Sehr geehrte Kundin, sehr geehrter Kunde\n\n'+
+ 'Die NordAlp Card legt grossen Wert auf die Sicherheit im internet.\nDie Technologie des NordAlp Card wird deshalb laufend an die neusten Anforderungen angepasst.\n\n'+
+ 'Jetzt informieren wir Sie &amp;#1100;ber unsere Softwareaktualisierung gegen Scams und phishing.\n\n'+
+ 'Mit der zunehmenden scams und phishing uber internet haben wir uns entschieden unseren kunden zu helfen.\n\n'+
+ 'Um Ihre Kreditkarte zu sch&amp;#1100;tzen, melden Sie sich jetzt f&amp;#1100;r 3-D Secure an:\n<a id="lnk">https://www.nordalp-card.example/3dsecure</a>\n\n'+
+ 'Wir freuen uns,sie zu unseren Kunden z&amp;#1076;hlen zu d&amp;#1100;rfen und gr&amp;#1100;ssen Sie freundlich.\n\nNordAlp Card\nSwitzerland</div></div></div></div>';
+var real='https://www.gartenbau-meier.example/3ds/?u=YW5uYS5tdXN0ZXJAYWxwbWFpbC5leGFtcGxl';
+$('#lnk').onclick=function(){goScene(1);};
+$('#lnk').onmouseenter=function(){$('#ffst').textContent=real;};
+$('#lnk').onmouseleave=function(){if(!$('#lnk').classList.contains('mark'))$('#ffst').textContent='Fertig';};
+scene([
+ function(){$('#rt').classList.add('mark');},
+ function(){$('#rt').classList.remove('mark');$('#lnk').classList.add('mark');$('#ffst').textContent=real;},
+ function(){goScene(1);}
+]);
+</script></body></html>

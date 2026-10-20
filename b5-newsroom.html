@@ -1,0 +1,61 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Newsroom wall</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ .stage{background:#16181b}
+ #wall{position:absolute;left:30px;top:18px;display:grid;grid-template-columns:repeat(4,296px);gap:12px 16px}
+ .mon{background:#2b2b2b;padding:9px 9px 10px;border-radius:3px;position:relative}
+ .mon:after{content:"";position:absolute;left:50%;bottom:5px;width:6px;height:4px;margin-left:-3px;background:#6bd36b;border-radius:1px}
+ .scr{width:278px;height:156px;overflow:hidden;position:relative;background:#000}
+ .mini{position:absolute;left:0;top:0;width:1280px;height:720px;transform:scale(.2172);transform-origin:0 0;background:#3A6EA5}
+ .tag{color:#7d8590;font:12px Arial;margin-top:4px;text-align:center}
+ .mini .xp-bar{position:absolute;left:0;right:0;bottom:0;height:30px;background:linear-gradient(#3168d5,#2456c7 10%,#245dda 80%,#1941a5)}
+ .mini .xp-start{position:absolute;left:0;bottom:0;height:30px;width:110px;background:linear-gradient(#3c9a3c,#2f8a2f);border-radius:0 10px 10px 0;
+   color:#fff;font:italic bold 20px Tahoma;display:flex;align-items:center;justify-content:center}
+ .mini .xp-win{position:absolute;left:150px;top:40px;width:980px;height:560px;background:#ECE9D8;border:3px solid #0831d9;border-top:30px solid #0a5ae0;border-radius:8px 8px 0 0}
+</style></head><body>
+<div class="stage" data-w="1280" data-h="720" style="width:1280px;height:720px">
+ <div id="wall"></div>
+ <div class="recon" style="left:30px;top:690px">Illustration. Fictional newsroom. Machines in a reboot loop on 16 August 2005; the Windows XP machine was not affected.</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/desk.js"></script><script src="assets/sim.js"></script>
+<script>
+var wall=$('#wall'),M=[];
+function dialogHTML(){return '<div class="win" style="left:390px;top:200px;width:500px;z-index:5"><div class="title" style="height:26px;font-size:15px"><span class="t">System Shutdown</span></div>'+
+  '<div style="padding:14px;font-size:15px;line-height:19px">This system is shutting down. Please save all work in progress and log off. Any unsaved changes will be lost.<br><br>Time before shutdown:<br><b class="cd" style="font-size:22px">00:00:60</b></div></div>';}
+for(var i=0;i<12;i++){
+  var xp=(i===6);
+  var m=document.createElement('div');m.className='mon';
+  m.innerHTML='<div class="scr"><div class="mini"></div></div><div class="tag">'+(xp?'NY-ED-0377 (XP)':'NY-ED-04'+pad(10+i*3,2))+'</div>';
+  wall.appendChild(m);
+  var mini=m.querySelector('.mini');
+  if(xp){mini.style.background='#3a6ea5';mini.innerHTML='<div class="xp-win"><div style="position:absolute;top:-26px;left:10px;color:#fff;font:bold 17px Tahoma">EVENING 18:00 - script</div><div style="position:absolute;inset:40px 30px 30px;background:#fff;border:1px solid #7f9db9;padding:20px;font:20px/34px Arial;color:#333">ANCHOR: Computers at several companies were hit today by a fast-moving worm...</div></div><div class="xp-bar"></div><div class="xp-start">start</div>';continue;}
+  buildDesk(mini,{inactive:true,clock:'4:58 PM'});
+  mini.insertAdjacentHTML('beforeend',dialogHTML());
+  M.push({el:mini,dlg:mini.querySelector('.win:last-child'),cd:mini.querySelector('.cd'),state:'desk',t:3+((i*7)%9),n:0});
+}
+function setState(o,s){
+  o.state=s;var e=o.el;
+  e.style.background=s==='black'?'#000':'#3A6EA5';
+  Array.prototype.forEach.call(e.children,function(c){c.style.visibility=(s==='black'||s==='logon')?'hidden':'visible';});
+  o.dlg.style.visibility=s==='count'?'visible':'hidden';
+  var lg=e.querySelector('.lg');if(lg)lg.remove();
+  if(s==='logon')e.insertAdjacentHTML('beforeend','<div class="lg win" style="left:390px;top:200px;width:500px;visibility:visible"><div class="title" style="height:26px;font-size:15px"><span class="t">Welcome to Windows</span></div><div style="height:72px;background:linear-gradient(90deg,#0A246A,#3A6EA5 70%,#A6CAF0)"></div><div style="padding:18px;font:bold 16px Tahoma">Press Ctrl-Alt-Delete to begin.</div></div>');
+}
+M.forEach(function(o,i){var st=['desk','count','black','logon','count','desk','logon','black','count'][i%9];setState(o,st);o.n=10+(i*17)%45;o.t=1+(i*5)%4;if(st==='count')o.cd.textContent='00:00:'+pad(o.n,2);});
+var running=false,tickN=0;
+function tick(){
+  if(!running)return;
+  M.forEach(function(o){
+    o.t--;
+    if(o.state==='count'){o.n--;o.cd.textContent='00:00:'+pad(Math.max(o.n,0),2);if(o.n<=0){setState(o,'black');o.t=3;}}
+    else if(o.t<=0){
+      if(o.state==='desk'){setState(o,'count');o.n=8+((tickN*13+o.t*7)%40);}
+      else if(o.state==='black'){setState(o,'logon');o.t=3;}
+      else if(o.state==='logon'){setState(o,'desk');o.t=2+(tickN%4);}
+    }
+  });
+  tickN++;setTimeout(tick,1000);
+}
+scene([function(){running=true;tick();}]);
+</script></body></html>

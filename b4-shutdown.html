@@ -1,0 +1,66 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>System Shutdown</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ #dlg{left:430px;top:190px;width:420px;z-index:50}
+ #dlg .body{padding:12px 12px 14px;line-height:15px}
+ #dlg .t2{margin:12px 0 2px}
+ #dlg .clock{font-weight:bold;margin-bottom:10px}
+ fieldset{border:0;margin:0;padding:12px 8px 8px;position:relative;
+   box-shadow:inset 1px 1px #808080,inset -1px -1px #fff,inset 2px 2px #fff,inset -2px -2px #808080}
+ legend{position:absolute;top:-7px;left:7px;background:#D4D0C8;padding:0 2px}
+ #black{position:absolute;inset:0;background:#000;z-index:80;display:none}
+ #logon{position:absolute;inset:0;background:#3A6EA5;z-index:70;display:none}
+ #lw{left:390px;top:200px;width:500px}
+ #lw .band{height:72px;background:linear-gradient(90deg,#0A246A,#3A6EA5 70%,#A6CAF0);margin:1px}
+ #lw .body{padding:16px 18px;line-height:15px}
+ #lw .key{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+ .kb{width:44px;height:30px;background:#fff;border:1px solid #808080;font:bold 9px Tahoma;display:flex;align-items:center;justify-content:center}
+</style></head><body>
+<div class="stage" id="s">
+ <div class="win hide" id="dlg">
+  <div class="title"><span class="t">System Shutdown</span><b class="tbtn" data-g="x" style="opacity:.45"></b></div>
+  <div class="body">
+   <div>This system is shutting down. Please save all work in progress and log off. Any unsaved changes will be lost. This shutdown was initiated by NT AUTHORITY\SYSTEM</div>
+   <div class="t2">Time before shutdown:</div>
+   <div class="clock" id="clk">00:01:00</div>
+   <fieldset><legend>Message</legend>The system process 'C:\WINNT\system32\services.exe' terminated unexpectedly with status code -1073741819. The system will now shut down and restart.</fieldset>
+  </div>
+ </div>
+ <div id="black"></div>
+ <div id="logon" data-click><div class="win" id="lw">
+  <div class="title"><span class="t">Welcome to Windows</span></div>
+  <div class="band"></div>
+  <div class="body"><div class="key"><div class="kb">Ctrl</div><div class="kb">Alt</div><div class="kb">Delete</div></div>
+   <b>Press Ctrl-Alt-Delete to begin.</b><br><br>Requiring this key combination at startup helps keep your computer secure. For more information, click Help.
+   <div style="text-align:right;margin-top:14px"><span class="btn">Help</span></div></div>
+ </div></div>
+ <div class="recon" style="left:120px;top:600px">Reconstruction of the standard Windows 2000 dialog. Exact countdown label and status code to be confirmed on a Windows 2000 SP4 machine.</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/desk.js"></script><script src="assets/sim.js"></script>
+<script>
+buildDesk($('#s'),{inactive:true,clock:'4:58 PM'});
+var q=/[?&]from=(\d+)/.exec(location.search),FROM=q?+q[1]:60,timer=null,left=FROM,loops=0;
+function fmt(n){return '00:'+pad(Math.floor(n/60),2)+':'+pad(n%60,2);}
+function countdown(){
+  clearInterval(timer);left=loops?Math.min(FROM,60):FROM;show('#dlg');$('#clk').textContent=fmt(left);
+  release();window.SIM_BUSY++;window._cdHeld=true;
+  timer=setInterval(function(){left--;$('#clk').textContent=fmt(Math.max(left,0));if(left<=0){clearInterval(timer);release();setTimeout(blackout,700);}},1000);
+}
+var gen=0;
+function release(){if(window._cdHeld){window._cdHeld=false;window.SIM_BUSY--;}}
+function blackout(){clearInterval(timer);release();var g=++gen;hide('#dlg');$('#black').style.display='block';$('#logon').style.display='none';
+  window.SIM_BUSY++;setTimeout(function(){window.SIM_BUSY--;if(g!==gen)return;$('#logon').style.display='block';$('#black').style.display='none';},4000);}
+function logon(){clearInterval(timer);release();var g=++gen;$('#black').style.display='none';$('#logon').style.display='none';hide('#dlg');loops++;
+  window.SIM_BUSY++;setTimeout(function(){window.SIM_BUSY--;if(g===gen)countdown();},5000);}
+// Clicking the Ctrl-Alt-Delete screen logs back on, then the dialog returns.
+$('#logon').addEventListener('click',function(){logon();});
+// Keys: 1) dialog appears and counts  2) jump to the reboot  3) log back on, it comes back in 5 s
+scene([
+ function(){countdown();},
+ function(){blackout();},
+ function(){logon();},
+ function(){blackout();},
+ function(){logon();}
+]);
+</script></body></html>

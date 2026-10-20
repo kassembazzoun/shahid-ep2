@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Windows Task Manager</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ #tm{left:330px;top:56px;width:420px;height:470px;display:flex;flex-direction:column;z-index:5}
+ .tabs{display:flex;margin:6px 6px 0;position:relative;top:1px}
+ .tabs span{padding:3px 8px;background:#D4D0C8;box-shadow:inset 1px 1px #fff,inset -1px 0 #404040,inset -2px 0 #808080}
+ .tabs span.on{padding:4px 8px 4px;margin-top:-2px;position:relative;z-index:2}
+ .pane{flex:1;margin:0 6px 6px;padding:8px;display:flex;flex-direction:column;
+   box-shadow:inset 1px 1px #fff,inset -1px -1px #404040,inset -2px -2px #808080}
+ .pane .sunk{flex:1;overflow:hidden}
+ #rg{left:230px;top:120px;width:820px;height:440px;display:flex;flex-direction:column;z-index:6}
+ .split{flex:1;min-height:0;display:flex;gap:3px;margin:2px}
+ .tree{width:330px;overflow:hidden;padding:3px 2px;white-space:nowrap;line-height:17px}
+ .tree div{padding-left:var(--d)}
+ .tree .s{background:#0A246A;color:#fff;padding:0 2px}
+ .vals{flex:1;overflow:hidden}
+</style></head><body>
+<div class="stage" id="s">
+ <div class="win" id="tm">
+  <div class="title"><i data-icon="taskmgr" class="ico"></i><span class="t">Windows Task Manager</span><b class="tbtn" data-g="min"></b><b class="tbtn" data-g="max"></b><b class="tbtn gap" data-g="x"></b></div>
+  <div class="menubar"><span><u>F</u>ile</span><span><u>O</u>ptions</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
+  <div class="tabs"><span>Applications</span><span class="on">Processes</span><span>Performance</span></div>
+  <div class="pane"><div class="sunk"><table class="lv" id="pl"><thead><tr><th>Image Name</th><th>PID</th><th>CPU</th><th>CPU Time</th><th>Mem Usage</th></tr></thead><tbody></tbody></table></div>
+   <div style="text-align:right;margin-top:8px"><span class="btn">End Process</span></div></div>
+  <div class="status" style="margin:0"><div>Processes: 18</div><div>CPU Usage: 39%</div><div style="flex:1.4">Mem Usage: 118204K / 627500K</div></div>
+ </div>
+ <div class="win hide" id="rg">
+  <div class="title"><i data-icon="regedit" class="ico"></i><span class="t">Registry Editor</span><b class="tbtn" data-g="min"></b><b class="tbtn" data-g="max"></b><b class="tbtn gap" data-g="x"></b></div>
+  <div class="menubar"><span><u>R</u>egistry</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span>F<u>a</u>vorites</span><span><u>H</u>elp</span></div>
+  <div class="split"><div class="tree sunk sb both" id="tree"></div>
+   <div class="vals sunk sb"><table class="lv"><thead><tr><th style="width:200px">Name</th><th>Data</th></tr></thead><tbody id="vals"></tbody></table></div></div>
+  <div class="status" style="margin:0"><div id="rpath"></div></div>
+ </div>
+ <div class="recon" style="left:120px;top:600px">Reconstruction. File name, registry value and service change from F-Secure and Symantec (Zotob.A).</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/desk.js"></script><script src="assets/sim.js"></script>
+<script>
+buildDesk($('#s'),{inactive:true,clock:'1:31 PM',extraTask:'<div class="task" id="tk2"><i data-icon="taskmgr"></i>Windows Task Manager</div>'});
+var P=[['System Idle Process',0,61,'1:42:10','16 K'],['System',8,0,'0:00:21','216 K'],['smss.exe',140,0,'0:00:00','344 K'],
+ ['csrss.exe',164,0,'0:00:08','1,716 K'],['winlogon.exe',184,0,'0:00:01','3,268 K'],['services.exe',212,0,'0:00:04','5,412 K'],
+ ['lsass.exe',224,0,'0:00:02','1,220 K'],['svchost.exe',388,0,'0:00:00','3,040 K'],['spoolsv.exe',416,0,'0:00:00','3,624 K'],
+ ['svchost.exe',552,0,'0:00:01','7,860 K'],['regsvc.exe',584,0,'0:00:00','808 K'],
+ ['mstask.exe',604,0,'0:00:00','1,844 K'],['WinMgmt.exe',636,0,'0:00:01','164 K'],['explorer.exe',1048,1,'0:00:14','12,092 K'],['internat.exe',1176,0,'0:00:00','1,452 K'],
+ ['rundown.exe',1132,0,'0:00:31','9,748 K'],['botzor.exe',1356,38,'0:02:47','2,436 K'],['taskmgr.exe',1412,0,'0:00:00','2,060 K']];
+$('#pl tbody').innerHTML=P.map(function(p){return '<tr data-n="'+p[0]+'"><td>'+p[0]+'</td><td>'+p[1]+'</td><td>'+pad(p[2],2)+'</td><td>'+p[3]+'</td><td style="text-align:right">'+p[4]+'</td></tr>';}).join('');
+$('#tm').classList.remove('inactive');$('#tk1').classList.remove('on');$('#tk2').classList.add('on');
+function tree(lines,sel){$('#tree').innerHTML=lines.map(function(l){var t=l[1];return '<div style="--d:'+(l[0]*16+2)+'px"><i data-icon="'+(l[0]?'folder':'computer')+'" data-size="14" style="vertical-align:-3px;margin-right:4px"></i><span'+(t===sel?' class="s"':'')+'>'+t+'</span></div>';}).join('');paintIcons($('#tree'));var s=$('#tree .s');if(s)$('#tree').scrollTop=s.parentNode.offsetTop-120;}
+var base=[[0,'My Computer'],[1,'HKEY_CLASSES_ROOT'],[1,'HKEY_CURRENT_USER'],[1,'HKEY_LOCAL_MACHINE'],[2,'HARDWARE'],[2,'SAM'],[2,'SECURITY'],[2,'SOFTWARE']];
+scene([
+ function(){document.querySelector('#pl tr[data-n="botzor.exe"]').classList.add('sel');},
+ function(){
+  show('#rg');$('#tm').classList.add('inactive');$('#tk2').classList.remove('on');
+  $('.tray').insertAdjacentHTML('beforebegin','<div class="task on"><i data-icon="regedit"></i>Registry Editor</div>');paintIcons();
+  tree(base.concat([[3,'Microsoft'],[4,'Windows'],[5,'CurrentVersion']],['App Paths','Applets','Controls Folder','Explorer','Extensions','Group Policy','Installer','Internet Settings','ModuleUsage','Policies','Reliability','Run','RunOnce','RunOnceEx','RunServices','RunServicesOnce','Setup','SharedDLLs','Shell Extensions','Uninstall'].map(function(k){return [6,k];}),[[2,'SYSTEM']]),'Run');
+  $('#vals').innerHTML='<tr><td>(Default)</td><td>(value not set)</td></tr><tr><td>internat.exe</td><td>"internat.exe"</td></tr><tr class="sel"><td>WINDOWS SYSTEM</td><td>"botzor.exe"</td></tr>';
+  $('#rpath').textContent='My Computer\\HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run';
+ },
+ function(){
+  tree(base.concat([[2,'SYSTEM'],[3,'ControlSet001'],[3,'ControlSet002'],[3,'CurrentControlSet'],[4,'Control'],[4,'Enum'],[4,'Hardware Profiles'],[4,'Services']],['RemoteAccess','RpcLocator','RpcSs','RSVP','SamSs','SCardDrv','SCardSvr','Schedule','seclogon','SENS','Serial','SharedAccess','Spooler','sysaudio','SysmonLog','TapiSrv','Tcpip','TermService'].map(function(k){return [5,k];})),'SharedAccess');
+  $('#vals').innerHTML='<tr><td>(Default)</td><td>(value not set)</td></tr><tr><td>DisplayName</td><td>"Internet Connection Sharing"</td></tr><tr><td>ErrorControl</td><td>0x00000001 (1)</td></tr><tr><td>ImagePath</td><td>"%SystemRoot%\\System32\\svchost.exe -k netsvcs"</td></tr><tr><td>ObjectName</td><td>"LocalSystem"</td></tr><tr class="sel"><td>Start</td><td>0x00000004 (4)</td></tr><tr><td>Type</td><td>0x00000020 (32)</td></tr>';
+  $('#rpath').textContent='My Computer\\HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\SharedAccess';
+ }
+]);
+</script></body></html>

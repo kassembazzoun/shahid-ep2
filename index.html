@@ -1,0 +1,60 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ep2 shot list - Zotob / Diabl0</title>
+<style>
+ body{font:14px/1.45 Arial,Helvetica,sans-serif;color:#111;background:#fff;margin:0}
+ .w{max-width:980px;margin:0 auto;padding:28px 18px 60px}
+ h1{font-size:20px;margin:0 0 2px}
+ p{margin:6px 0}
+ .m{color:#555}
+ table{border-collapse:collapse;width:100%;margin:6px 0 22px}
+ th,td{border:1px solid #bbb;padding:5px 8px;text-align:left;vertical-align:top}
+ th{background:#eee;font-weight:bold}
+ td:first-child{white-space:nowrap;font-weight:bold}
+ h2{font-size:15px;margin:22px 0 4px}
+ a{color:#0645ad}
+ code{font:13px Consolas,monospace;background:#f2f2f2;padding:0 3px}
+</style></head><body><div class="w">
+<h1>Episode 2 - Zotob / Diabl0 - simulation shot list</h1>
+<p class="m">Semicolon Security for the Shahid documentary. Recording set, 17 scenes. Research: reports\Diabl0 Zotob simulation research.md</p>
+<p>Click anywhere on a scene for the next step; buttons, links, text boxes and list rows work like the real thing. Keys: <code>Space</code> next step, <code>Left</code> restart, <code>N</code> / <code>B</code> next / previous scene, <code>Z</code> camera push-in on the key detail.
+Record in Chrome full screen (F11) on a Windows PC; every scene is 16:9. Add <code>?clean=1</code> (and <code>&amp;nocursor=1</code>) to hide the SIMULATION badge and the grey source tags. Full notes in <code>STEPS.md</code>.</p>
+<p><b><a href="play.html">Play the whole episode</a></b>: one page that plays every scene in order, step by step, full screen. Choose the pace, press Start, record the screen once. Space pause, Right arrow next step, N / B next / previous scene, H scene name.</p>
+<p>Nothing here works for real. No page sends, stores or downloads anything. Newsroom, card issuer, cardholder and all addresses are fictional; IPs are documentation ranges.</p>
+
+<h2>Part A - The worm (attacker side, August 2005)</h2>
+<table><tr><th>#</th><th>Scene</th><th>What is on screen</th><th>Steps</th></tr>
+<tr><td><a href="a1-exploit.html">A1</a></td><td>The public exploit</td><td>Console runs the MS05-039 exploit released 10-12 Aug 2005, then a remote Windows 2000 prompt opens.</td><td>3</td></tr>
+<tr><td><a href="a2-strings.html">A2</a></td><td>Inside botzor.exe</td><td>Text scan of the worm file. Highlights the mutex, file name, startup key, the two boast lines, blocked sites, the server name, the FTP file names.</td><td>7</td></tr>
+<tr><td><a href="a3-irc.html">A3</a></td><td>The control channel</td><td>mIRC connects to diabl0.turkcoders.net:8080. Infected machines join one by one, the operator asks for system info, then the flood.</td><td>4</td></tr>
+<tr><td><a href="a4-chat.html">A4</a></td><td>"only for money"</td><td>The chat with "DiablO" published by the Washington Post, 29 Aug 2005, verbatim, in a 2005 text-mode chat window. One message per press.</td><td>15</td></tr>
+<tr><td><a href="a5-infection.html">A5</a></td><td>One machine to the next</td><td>Split screen of two Windows 2000 PCs, six steps. Left: the infected PC's connections (port 445, 8888, 33333). Right: the victim's Task Manager as the hidden programs appear (cmd.exe, ftp.exe, haha.exe, botzor.exe).</td><td>6</td></tr>
+<tr><td><a href="a6-scan.html">A6</a></td><td>300 threads</td><td>One infected PC firing at many addresses at once. Most fail, a few turn red.</td><td>2</td></tr>
+</table>
+
+<h2>Part B - The outbreak (victim side, 14-18 August 2005)</h2>
+<table><tr><th>#</th><th>Scene</th><th>What is on screen</th><th>Steps</th></tr>
+<tr><td><a href="b1-desktop.html">B1</a></td><td>A normal afternoon</td><td>Newsroom PC (fictional MNN), Windows 2000, the evening rundown open. 1:24 PM.</td><td>0</td></tr>
+<tr><td><a href="b2-taskmgr.html">B2</a></td><td>Something is running</td><td>Task Manager shows botzor.exe. Registry Editor shows the "WINDOWS SYSTEM" startup value and the disabled SharedAccess service.</td><td>3</td></tr>
+<tr><td><a href="b3-hosts.html">B3</a></td><td>The hosts file</td><td>Notepad: "Botzor2005 Made By .... Greetz to good friend Coder" and the antivirus sites sent to 127.0.0.1.</td><td>2</td></tr>
+<tr><td><a href="b4-shutdown.html">B4</a></td><td>The countdown (key shot)</td><td>"System Shutdown", 60 seconds, black, logon screen, back to the desktop, and it comes again. Real-time countdown; <code>?from=10</code> for a short one. <code>Z</code> for the close-up.</td><td>5</td></tr>
+<tr><td><a href="b5-newsroom.html">B5</a></td><td>The newsroom wall</td><td>Eleven Windows 2000 screens cycling through the loop at different moments. The one Windows XP machine keeps working.</td><td>1</td></tr>
+</table>
+
+<h2>Part C - The hunt and the trial</h2>
+<table><tr><th>#</th><th>Scene</th><th>What is on screen</th><th>Steps</th></tr>
+<tr><td><a href="c1-lookup.html">C1</a></td><td>The server is gone</td><td>Recreation of F-Secure's capture: "host diabl0.turkcoders.net / host not found, try again", over and over.</td><td>2</td></tr>
+<tr><td><a href="c2-clues.html">C2</a></td><td>Two nicknames</td><td>Back in the strings: "Coder" in the boast line, "diabl0" in the server name.</td><td>3</td></tr>
+<tr><td><a href="c3-verdict.html">C3</a></td><td>The outcomes</td><td>Typed sheet: Morocco (2 years, 1 year on appeal, released), Turkey (outcome never made public), Bahloul.</td><td>5</td></tr>
+</table>
+
+<h2>Part D - The Swiss card phishing case (2009-2019)</h2>
+<table><tr><th>#</th><th>Scene</th><th>What is on screen</th><th>Steps</th></tr>
+<tr><td><a href="d1-email.html">D1</a></td><td>The email</td><td>German webmail, 2011. "NordAlp Card" asks the cardholder to sign up for 3-D Secure. Broken German, a free-mail reply address, a link that goes somewhere else.</td><td>3</td></tr>
+<tr><td><a href="d2-3dsecure.html">D2</a></td><td>The card page</td><td>"Sch&uuml;tzen Sie Ihre Kreditkarte" on a hacked garden company site. Card, code, expiry, account number, birth date. Later the browser flags it red.</td><td>5</td></tr>
+<tr><td><a href="d3-funnel.html">D3</a></td><td>The case that shrank</td><td>From 133,600 cards (prosecutors) and "$4 billion" (Thai police) to 53 cards, 180 days, and CHF 62,880 paid to him.</td><td>6</td></tr>
+</table>
+
+<h2>Not built as pages (were planned as motion graphics)</h2>
+<p>Numbering here follows the report: bot war sketch (B6), F-Secure night log (B7), US airports map (B8), scale counters (B9), FBI flights map (C3), quote cards (C4), Bangkok map (D4), and the extras E1-E5. C3 and D3 on this page are the report's C5 and D5.</p>
+</div><script src="assets/sim.js"></script></body></html>

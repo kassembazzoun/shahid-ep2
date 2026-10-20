@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Zotob case - outcomes</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ .stage{background:#2a2c2f}
+ #p{position:absolute;left:112px;top:26px;width:980px;height:440px;display:flex;gap:60px;background:#f4f1ea;color:#1d1d1d;padding:26px 38px;
+   font:18px/25px "Courier New",Courier,monospace;box-shadow:0 2px 0 #c9c4b8}
+ h2{font:bold 20px "Courier New",monospace;margin:0 0 14px;letter-spacing:1px}
+ .col{flex:1}
+ .k{color:#6b6b6b}
+ .ln{opacity:0;transition:opacity .8s}
+ .ln.on{opacity:1}
+ s{color:#8a8a8a}
+</style></head><body>
+<div class="stage" data-w="1280" data-h="720" style="width:1280px;height:720px">
+ <div id="p">
+  <div class="col">
+   <h2>MOROCCO</h2>
+   <div class="ln" id="l1">Farid Essebar ("Diabl0")<br><span class="k">arrested Rabat, 25 Aug 2005</span></div><br>
+   <div class="ln" id="l2"><span class="k">12 Sep 2006, first instance:</span><br>conspiracy, theft, use of forged<br>credit cards, illegal access to<br>computer systems</div>
+   <div class="ln" id="l3"><span id="y2">2 years</span></div><br>
+   <div class="ln" id="l4"><span class="k">Dec 2006, Court of Appeal, Sale:</span><br>1 year. Released.</div>
+  </div><div class="col">
+   <h2>TURKEY</h2>
+   <div class="ln" id="l5">Atilla Ekici ("Coder")<br><span class="k">arrested Adana, 25 Aug 2005</span></div><br>
+   <div class="ln" id="l6"><span class="k">charged with online fraud</span><br>outcome never made public</div><br><br>
+   <h2 class="ln" id="l7h">ALSO CONVICTED</h2>
+   <div class="ln" id="l7">Achraf Bahloul<br><span class="k">1 year, reduced to 6 months</span></div>
+  </div>
+ </div>
+ <div class="recon" style="left:112px;top:480px">Sources: FBI releases 26 Aug 2005 and 13 Sep 2006; AFP 12 Sep 2006; Bladi.net Dec 2006; Hurriyet 26 Aug 2005.</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/sim.js"></script>
+<script>
+function on(){for(var i=0;i<arguments.length;i++)$('#'+arguments[i]).classList.add('on');}
+scene([
+ function(){on('l1','l5');},
+ function(){on('l2','l3');},
+ function(){on('l4');$('#y2').innerHTML='<s>2 years</s>';},
+ function(){on('l6');},
+ function(){on('l7h','l7');}
+]);
+</script></body></html>

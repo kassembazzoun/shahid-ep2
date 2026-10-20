@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Swiss case - figures</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ .stage{background:#2a2c2f}
+ #p{position:absolute;left:112px;top:26px;width:980px;height:440px;background:#f4f1ea;color:#1d1d1d;padding:24px 38px;
+   font:18px/25px "Courier New",Courier,monospace;box-shadow:0 2px 0 #c9c4b8}
+ .r{display:flex;gap:20px;opacity:0;transition:opacity .8s;margin-bottom:9px}
+ .r.on{opacity:1}
+ .r .w{width:300px;color:#6b6b6b;flex:none}
+ .r .v{font-weight:bold}
+ .r .v small{font-weight:normal;color:#6b6b6b}
+ .gap{height:12px}
+ s{color:#9a9a9a}
+</style></head><body>
+<div class="stage" data-w="1280" data-h="720" style="width:1280px;height:720px">
+ <div id="p">
+  <div class="r" id="r1"><div class="w">Swiss prosecutors, 2016</div><div class="v">at least 133,600 cards <small>worldwide</small></div></div>
+  <div class="r" id="r2"><div class="w"></div><div class="v">3,602 Swiss cards, about CHF 3.5 million</div></div>
+  <div class="r" id="r3"><div class="w">Thai police, 2014</div><div class="v" id="b4">"$4 billion" <small>never confirmed by Switzerland</small></div></div>
+  <div class="gap"></div>
+  <div class="r" id="r4"><div class="w">Federal Criminal Court,<br>26 Oct 2016</div><div class="v">agreed 3-year sentence rejected <small>(abbreviated procedure)</small></div></div>
+  <div class="gap"></div>
+  <div class="r" id="r5"><div class="w">Held against him, 2019</div><div class="v">53 cards, 144 transactions,<br>CHF 86,427.28</div></div>
+  <div class="r" id="r6"><div class="w">Sentence</div><div class="v">180 days</div></div>
+  <div class="r" id="r7"><div class="w">Paid to him by Switzerland</div><div class="v">CHF 62,880 <small>held over two years too long</small></div></div>
+ </div>
+ <div class="recon" style="left:112px;top:480px">Sources: Office of the Attorney General (admin.ch) 2016; swissinfo 2016; PCWorld/IDG 2014; Beobachter 2019.</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/sim.js"></script>
+<script>
+function on(){for(var i=0;i<arguments.length;i++)$('#'+arguments[i]).classList.add('on');}
+scene([
+ function(){on('r1','r2');},
+ function(){on('r3');},
+ function(){on('r4');$('#b4').innerHTML='<s>"$4 billion"</s> <small>never confirmed by Switzerland</small>';},
+ function(){on('r5');},
+ function(){on('r6');},
+ function(){on('r7');}
+]);
+</script></body></html>

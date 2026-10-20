@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>hosts - Notepad</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ #np{left:140px;top:24px;width:1000px;height:560px;display:flex;flex-direction:column;z-index:5}
+ #txt{flex:1;margin:0 1px 1px;overflow:hidden;padding:3px 4px;font:17px/22px "Lucida Console","Courier New",monospace;white-space:pre}
+ #txt .sig{background:#0A246A;color:#fff}
+</style></head><body>
+<div class="stage" id="s">
+ <div class="win" id="np">
+  <div class="title"><i data-icon="notepad" class="ico"></i><span class="t">hosts - Notepad</span><b class="tbtn" data-g="min"></b><b class="tbtn" data-g="max"></b><b class="tbtn gap" data-g="x"></b></div>
+  <div class="menubar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span>F<u>o</u>rmat</span><span><u>H</u>elp</span></div>
+  <div class="sunk sb both" id="txt"></div>
+ </div>
+ <div class="recon" style="left:140px;top:600px">C:\WINNT\system32\drivers\etc\hosts on an infected machine. Text from F-Secure and Sophos; the order of the later lines is partly reconstructed.</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/desk.js"></script><script src="assets/sim.js"></script>
+<script>
+buildDesk($('#s'),{inactive:true,clock:'1:33 PM',extraTask:'<div class="task on"><i data-icon="notepad"></i>hosts - Notepad</div>'});
+$('#tk1').classList.remove('on');
+var first=['www.symantec.com','securityresponse.symantec.com','symantec.com','www.sophos.com'];
+var rest=['avp.com','ca.com','customer.symantec.com','dispatch.mcafee.com','download.mcafee.com','ebay.com','f-secure.com','kaspersky.com','kaspersky-labs.com',
+ 'liveupdate.symantec.com','liveupdate.symantecliveupdate.com','mast.mcafee.com','mcafee.com','microsoft.com','moneybookers.com','my-etrust.com','nai.com',
+ 'networkassociates.com','pandasoftware.com','paypal.com','rads.mcafee.com','secure.nai.com','sophos.com','trendmicro.com','updates.symantec.com',
+ 'update.symantec.com','us.mcafee.com','viruslist.com','virustotal.com','www.amazon.com','www.amazon.co.uk','www.amazon.ca','www.amazon.fr','www.avp.com',
+ 'www.ca.com','www.ebay.com','www.f-secure.com','www.grisoft.com','www.kaspersky.com','www.mcafee.com','www.microsoft.com','www.moneybookers.com',
+ 'www.my-etrust.com','www.nai.com','www.networkassociates.com','www.pandasoftware.com','www.paypal.com','www.trendmicro.com','www.virustotal.com'];
+var t=$('#txt');
+t.innerHTML='<span class="sig">Botzor2005 Made By .... Greetz to good friend Coder. Based On HellBot3</span>\n'+
+ '<span class="sig">MSG to avs: the first av who detect this worm will be the first killed in the next 24hours!!!</span>\n'+
+ first.concat(rest).map(function(d){return '127.0.0.1 '+d;}).join('\n');
+var sigs=document.querySelectorAll('#txt .sig');sigs.forEach(function(e){e.classList.remove('sig');});
+scene([
+ function(){sigs.forEach(function(e){e.classList.add('sig');});},
+ function(f){sigs.forEach(function(e){e.classList.remove('sig');});
+   if(f){t.scrollTop=t.scrollHeight;return;}
+   (function sc(){if(t.scrollTop+t.clientHeight<t.scrollHeight){t.scrollTop+=2;setTimeout(sc,30);}})();}
+]);
+</script></body></html>

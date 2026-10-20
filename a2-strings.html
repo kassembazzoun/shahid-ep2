@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Text Scan - botzor.exe</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ #w{left:40px;top:14px;width:1200px;height:636px;display:flex;flex-direction:column}
+ .bar{display:flex;align-items:center;gap:6px;padding:6px 4px}
+ .bar .sunk{flex:1;height:21px;padding:4px 5px}
+ #list{flex:1;overflow:hidden;margin:0 4px}
+ #list table.lv td{font:15px/19px "Lucida Console","Courier New",monospace;padding:0 8px}
+ #list table.lv th{font-size:12px;position:sticky;top:0;z-index:1}
+ #list tr.hl td{background:#0A246A;color:#fff}
+ #list mark{background:#ffe100;color:#000;padding:0 1px}
+ #list tr.hl mark{background:#ffe100;color:#000}
+ .status{margin:2px 4px 0}
+</style></head><body>
+<div class="stage">
+ <div class="win" id="w">
+  <div class="title"><i data-icon="hex" class="ico"></i><span class="t">Text Scan - botzor.exe</span>
+   <b class="tbtn" data-g="min"></b><b class="tbtn" data-g="max"></b><b class="tbtn gap" data-g="x"></b></div>
+  <div class="menubar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
+  <div class="bar">File to scan <div class="sunk">C:\samples\zotob\botzor.exe</div><span class="btn">Browse</span><span class="btn def">Go</span></div>
+  <div id="list" class="sunk sb"><table class="lv"><thead><tr><th style="width:110px">File pos</th><th style="width:110px">Mem pos</th><th style="width:40px">ID</th><th>Text</th></tr></thead><tbody id="rows"></tbody></table></div>
+  <div class="status"><div style="flex:3" id="st">Ready</div><div id="cnt"></div><div>ANSI</div></div>
+ </div>
+ <div class="recon" style="left:40px;top:660px">Reconstruction from antivirus write-ups (F-Secure, Symantec, Sophos, McAfee, Aug 2005). Offsets illustrative.</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/strings.js"></script><script src="assets/sim.js"></script>
+<script>
+var S=BOTZOR_STRINGS,rows=$('#rows'),pos=0x4D;
+function hex(n){return pad(n.toString(16).toUpperCase(),12);}
+S.forEach(function(s,i){
+  var tr=document.createElement('tr');tr.dataset.k=s[1]||'';
+  pos+=(i<4?0x170:0x0A)+s[0].length+((i*37)%23);
+  tr.innerHTML='<td>'+hex(pos)+'</td><td>'+hex(pos+0x400C00)+'</td><td>A</td><td></td>';
+  tr.lastChild.textContent=s[0];rows.appendChild(tr);
+});
+$('#cnt').textContent='Strings: '+S.length;
+var box=$('#list');
+function focus(k,msg,marks){
+  rows.querySelectorAll('tr').forEach(function(r){r.classList.toggle('hl',r.dataset.k===k);});
+  var first=rows.querySelector('tr.hl');
+  if(first)box.scrollTop=Math.max(0,first.offsetTop-160);
+  $('#st').textContent=msg;
+}
+scene([
+ function(){focus('mutex','Find: B-O-T-Z-O-R');},
+ function(){focus('file','Find: botzor.exe');},
+ function(){focus('run','Find: Run');},
+ function(){focus('sig','Find: Botzor2005');},
+ function(){focus('hosts','Find: 127.0.0.1');},
+ function(){focus('c2','Find: turkcoders');},
+ function(){focus('ftp','Find: haha');}
+]);
+</script></body></html>

@@ -1,0 +1,67 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8">
+<title>Welcome</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ .p{padding:14px 26px;font:15px Arial,Helvetica,sans-serif;color:#222}
+ .brand{font:bold 15px Arial;color:#1d4f86;letter-spacing:.3px;margin-bottom:10px}
+ h1{font:normal 34px Arial,Helvetica,sans-serif;color:#0d3d78;margin:0 0 4px}
+ .sub{margin-bottom:26px}
+ .sub a{color:#0645ad}
+ .f{display:flex;align-items:center;height:32px}
+ .f label{width:250px}
+ .bx{outline:none;display:inline-block;white-space:nowrap;overflow:hidden;user-select:text;cursor:text;height:26px;border:1px solid #b9c98f;background:#fbfdf4;margin-right:5px;font:15px "Courier New",monospace;padding:4px 5px;color:#000}
+ .bx.g{background:#e3e3e3;border-color:#aaa}
+ .i{width:17px;height:17px;border-radius:50%;background:#2a5ea8;color:#fff;font:bold 12px Georgia;display:inline-flex;align-items:center;justify-content:center;margin-left:4px}
+ .acc{margin:12px 0 10px;display:flex;align-items:center;gap:6px}
+ .acc i{width:14px;height:14px;border:1px solid #666;background:#fff;display:inline-block;font:bold 12px/12px Arial;text-align:center;font-style:normal}
+ .acc a{color:#0645ad;font-weight:bold}
+ .go{display:flex;gap:18px;align-items:center;margin-left:160px}
+ .btn-w{cursor:pointer;border:1px solid #888;background:linear-gradient(#fafafa,#ddd);padding:3px 12px;font-weight:bold}
+ .go a{color:#0645ad;text-decoration:underline}
+ #done{font-size:18px;line-height:28px}
+ #form{display:inline-block}
+</style></head><body>
+<div class="stage" id="s" data-w="1280" data-h="720" style="width:1280px;height:720px">
+ <div class="recon" style="left:26px;top:640px;z-index:900">Layout and field labels from a real phishing page published by MELANI (Switzerland, 2012). Brand fictional; card data fake.</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/ff.js"></script><script src="assets/sim.js"></script>
+<script>
+var page=buildFF($('#s'),{host:'gartenbau-meier.example',secure:false,dv:true,url:'https://www.gartenbau-meier.example/3ds/?u=YW5uYS5tdXN0ZXJAYWxwbWFpbC5leGFtcGxl',tab:'Welcome'});
+// Editable text boxes, not <input>: browsers never offer saved card data for these.
+function bx(w,id){return '<span class="bx" contenteditable="true" spellcheck="false" id="'+id+'" data-max="'+(w===34?(id==='cv'?3:2):(id==='nm'?40:4))+'" style="width:'+w+'px"></span>';}
+var I='<span class="i">i</span>';
+page.innerHTML='<div class="p" id="form" data-focus><div class="brand">NordAlp Card</div><h1>Sch&uuml;tzen Sie Ihre Kreditkarte</h1>'+
+ '<div class="sub">Mehr Sicherheit im Internet: Melden Sie sich jetzt f&uuml;r <a>3-D Secure</a> an.</div>'+
+ '<div class="f"><label>Kreditkartennummer</label>'+bx(56,'c1')+bx(56,'c2')+bx(56,'c3')+bx(56,'c4')+I+'</div>'+
+ '<div class="f"><label>Name auf der Karte</label>'+bx(246,'nm')+I+'</div>'+
+ '<div class="f"><label>Dreistelliger Sicherheitscode</label>'+bx(34,'cv')+I+'</div>'+
+ '<div class="f"><label>Verfalldatum (z.B. 08/13)</label>'+bx(34,'m')+bx(34,'y')+'</div>'+
+ '<div class="f"><label>Kreditkarten Kontonummer</label><span class="bx g" style="width:56px">0000</span>'+bx(56,'k1')+bx(56,'k2')+bx(56,'k3')+I+'</div>'+
+ '<div class="f"><label>Geburtsdatum (z.B. 17/03/1972)</label>'+bx(34,'bd')+bx(34,'bm')+bx(56,'by')+'</div>'+
+ '<div class="acc" data-click id="acc"><i id="chk"></i> Ich akzeptiere die <a>Bestimmungen f&uuml;r 3-D Secure.</a></div>'+
+ '<div class="go"><span class="btn-w" data-click id="wt">Weiter</span><a>Hilfe</a></div></div>'+
+ '<div class="p hide" id="done"><div class="brand">NordAlp Card</div><h1>Vielen Dank</h1>Ihre Karte ist jetzt f&uuml;r 3-D Secure angemeldet.<br>Sie k&ouml;nnen dieses Fenster schliessen.</div>';
+// Fake values only. Card number starts 0000 and fails the Luhn check.
+var V=[['c1','0000'],['c2','4417'],['c3','2093'],['c4','5518'],['nm','ANNA MUSTER'],['cv','481'],['m','04'],['y','14'],
+  ['k1','3302'],['k2','7719'],['k3','0461'],['bd','22'],['bm','06'],['by','1979']];
+function fill(list,f,done){var i=0;(function n(){if(i>=list.length){if(done)done();return;}var v=list[i++];typeText('#'+v[0],v[1],f,85,function(){if(f)n();else setTimeout(n,180);});})();}
+// Real controls: type in the boxes, tick the box, press Weiter. Nothing is read, kept or sent.
+function submit(){hide('#form');show('#done');$('#ffst').textContent='Fertig';}
+$('#acc').onclick=function(){$('#chk').innerHTML=$('#chk').innerHTML?'':'<svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 5l3 3 5-7" stroke="#222" stroke-width="1.8" fill="none"/></svg>';};
+$('#wt').onclick=submit;
+var boxes=[].slice.call(document.querySelectorAll('.bx[contenteditable]'));
+boxes.forEach(function(b,i){
+  b.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();}});
+  b.addEventListener('input',function(){
+    var m=+b.dataset.max;if(b.textContent.length>m)b.textContent=b.textContent.slice(0,m);
+    if(b.id!=='nm'&&b.textContent.length>=m&&boxes[i+1]){boxes[i+1].focus();}
+  });
+});
+scene([
+ function(f){fill(V.slice(0,4),f);},
+ function(f){fill(V.slice(4,8),f);},
+ function(f){fill(V.slice(8),f,function(){$('#chk').innerHTML='<svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 5l3 3 5-7" stroke="#222" stroke-width="1.8" fill="none"/></svg>';});},
+ function(){submit();},
+ function(){show('#form');hide('#done');document.querySelectorAll('.bx[contenteditable]').forEach(function(b){b.textContent='';});$('#chk').innerHTML='';show('.ff-warn');}
+]);
+</script></body></html>

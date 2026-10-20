@@ -1,0 +1,100 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Zotob - one machine to the next</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ .stage{background:#1a1a1a}
+ .pane{position:absolute;top:58px;width:628px;height:598px;background:#3A6EA5;overflow:hidden}
+ #L{left:8px}#R{left:644px}
+ .pane .taskbar{height:26px}
+ .lbl{position:absolute;top:662px;width:628px;text-align:center;font:bold 15px Arial,sans-serif;color:#ddd}
+ .lbl small{display:block;font:13px Arial;color:#999;margin-top:2px}
+ #cap{position:absolute;left:8px;right:8px;top:0;height:52px;display:flex;align-items:center;gap:14px;font:20px Arial,sans-serif;color:#fff}
+ #cap b{font:bold 15px Arial;color:#1a1a1a;background:#d4d0c8;padding:3px 8px}
+ #cap small{font-size:15px;color:#aaa;margin-left:6px}
+ .clean #cap{visibility:hidden}
+ #ns{left:12px;top:12px;width:604px;height:548px;display:flex;flex-direction:column}
+ #nso{flex:1;margin-top:1px;font-size:13px;line-height:16px}
+ #tm{left:30px;top:20px;width:568px;height:530px;display:flex;flex-direction:column}
+ .tabs{display:flex;margin:6px 6px 0;position:relative;top:1px}
+ .tabs span{padding:3px 8px;background:#D4D0C8;box-shadow:inset 1px 1px #fff,inset -1px 0 #404040,inset -2px 0 #808080}
+ .tabs span.on{padding:4px 8px;margin-top:-2px}
+ .tpane{flex:1;min-height:0;margin:0 6px 6px;padding:8px;display:flex;flex-direction:column;box-shadow:inset 1px 1px #fff,inset -1px -1px #404040,inset -2px -2px #808080}
+ .tpane .sunk{flex:1;min-height:0}
+ tr.new td{background:#0A246A;color:#fff}
+ #wire{position:absolute;left:600px;top:300px;width:88px;text-align:center;z-index:40;
+   font:bold 13px "Lucida Console",monospace;color:#fff;background:#1a1a1a;padding:5px 0;border:1px solid #555}
+ #wire small{display:block;font:11px Arial;color:#bbb;margin-top:2px}
+</style></head><body>
+<div class="stage">
+ <div id="cap"><b id="no">1 / 6</b><span id="ct"></span></div>
+
+ <div class="pane" id="L">
+  <div class="win" id="ns"><div class="title"><i data-icon="cmd" class="ico"></i><span class="t">C:\WINNT\system32\cmd.exe</span><b class="tbtn" data-g="min"></b><b class="tbtn" data-g="max"></b><b class="tbtn gap" data-g="x"></b></div>
+   <div class="con sunk sb" id="nso"></div></div>
+  <div class="taskbar"><div class="start">Start</div><div class="tsep"></div><div class="task on"><i data-icon="cmd"></i>cmd.exe</div><div class="tray">2:06 PM</div></div>
+ </div>
+ <div class="lbl" style="left:8px">Infected PC<small>203.0.113.17 - its network connections (netstat -an)</small></div>
+
+ <div class="pane" id="R">
+  <div class="win" id="tm"><div class="title"><i data-icon="taskmgr" class="ico"></i><span class="t">Windows Task Manager</span><b class="tbtn" data-g="min"></b><b class="tbtn" data-g="max"></b><b class="tbtn gap" data-g="x"></b></div>
+   <div class="menubar"><span><u>F</u>ile</span><span><u>O</u>ptions</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
+   <div class="tabs"><span>Applications</span><span class="on">Processes</span><span>Performance</span></div>
+   <div class="tpane"><div class="sunk sb"><table class="lv"><thead><tr><th>Image Name</th><th>PID</th><th>CPU</th><th>CPU Time</th><th>Mem Usage</th></tr></thead><tbody id="pl"></tbody></table></div></div>
+   <div class="status" style="margin:0"><div id="pc">Processes: 16</div><div id="cpu">CPU Usage: 2%</div><div style="flex:1.4">Mem Usage: 96844K / 523764K</div></div></div>
+  <div class="taskbar"><div class="start">Start</div><div class="tsep"></div><div class="task on"><i data-icon="taskmgr"></i>Windows Task Manager</div><div class="tray">2:06 PM</div></div>
+ </div>
+ <div class="lbl" style="left:644px">Victim<small>203.0.113.88 - Windows 2000, not patched - its running programs</small></div>
+
+ <div id="wire" class="hide"></div>
+ <div class="recon" style="left:8px;top:700px">Sequence, ports and file names from F-Secure, Symantec and McAfee (Zotob.A, Aug 2005). Connection lines and process details are illustrative.</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/sim.js"></script>
+<script>
+var CAP=[
+ ['It knocks on port 445','The infected PC tries addresses near its own until a vulnerable machine answers.'],
+ ['It sends the Plug and Play exploit','On the victim a hidden command shell starts (cmd.exe) and waits on port 8888. Nothing appears on the victim\'s screen.'],
+ ['It drops an FTP script and runs it','Through that hidden shell it writes 2pac.txt and starts ftp.exe.'],
+ ['The victim downloads the worm','haha.exe comes from a small FTP server on the infected PC, port 33333.'],
+ ['The copy installs itself','Saved as botzor.exe, set to start with Windows.'],
+ ['The new copy starts scanning','It reports to the control server and knocks on port 445 by itself, with no one at either keyboard.']
+];
+function cap(n){$('#no').textContent=n+' / 6';$('#ct').innerHTML=CAP[n-1][0]+'<small>'+CAP[n-1][1]+'</small>';}
+function wire(t,s){var w=$('#wire');w.classList.remove('hide');w.innerHTML=t+(s?'<small>'+s+'</small>':'');}
+
+// Left: netstat -an on the infected PC (Windows 2000 format)
+var HEAD=['C:\\>netstat -an','','Active Connections','','  Proto  Local Address          Foreign Address        State'];
+function row(l,f,s){function p(x,n){while(x.length<n)x+=' ';return x;}return '  TCP    '+p(l,23)+p(f,23)+s;}
+var IRC=row('203.0.113.17:1031','198.51.100.23:8080','ESTABLISHED');
+var FTPL=row('0.0.0.0:33333','0.0.0.0:0','LISTENING');
+function scanRows(k){var r=[],port=1058;[61,140,23,201,88,117,9,176].slice(0,k).forEach(function(o,i){r.push(row('203.0.113.17:'+(port+i),'203.0.113.'+o+':445',o===88?'ESTABLISHED':'SYN_SENT'));});return r;}
+function ns(rows){var o=$('#nso');o.innerHTML='';HEAD.concat(rows).forEach(function(t){var d=document.createElement('div');d.textContent=t;o.appendChild(d);});}
+
+// Right: Task Manager on the victim
+var BASE=[['System Idle Process',0,97,'0:41:12','16 K'],['System',8,0,'0:00:09','216 K'],['smss.exe',140,0,'0:00:00','344 K'],
+ ['csrss.exe',164,0,'0:00:03','1,520 K'],['winlogon.exe',184,0,'0:00:01','2,984 K'],['services.exe',212,1,'0:00:02','5,188 K'],
+ ['lsass.exe',224,0,'0:00:01','1,104 K'],['svchost.exe',396,0,'0:00:00','2,972 K'],['spoolsv.exe',424,0,'0:00:00','3,512 K'],
+ ['svchost.exe',548,0,'0:00:01','7,404 K'],['regsvc.exe',580,0,'0:00:00','792 K'],['mstask.exe',600,0,'0:00:00','1,832 K'],
+ ['WinMgmt.exe',632,0,'0:00:00','168 K'],['explorer.exe',1032,2,'0:00:06','11,420 K'],['internat.exe',1160,0,'0:00:00','1,440 K'],
+ ['taskmgr.exe',1240,0,'0:00:00','2,052 K']];
+var extra=[];
+function tm(newName){
+  var all=BASE.concat(extra);
+  $('#pl').innerHTML=all.map(function(p){return '<tr'+(p[0]===newName?' class="new"':'')+'><td>'+p[0]+'</td><td>'+p[1]+'</td><td>'+pad(p[2],2)+'</td><td>'+p[3]+'</td><td style="text-align:right">'+p[4]+'</td></tr>';}).join('');
+  $('#pc').textContent='Processes: '+all.length;
+}
+function add(p){extra.push(p);tm(p[0]);}
+function drop(n){extra=extra.filter(function(p){return p[0]!==n;});}
+
+cap(1);ns([IRC].concat(scanRows(4)));tm();
+scene([
+ function(){cap(1);ns([IRC].concat(scanRows(8)));wire('TCP 445','knock');},
+ function(){cap(2);ns([IRC].concat(scanRows(8),[row('203.0.113.17:1067','203.0.113.88:8888','ESTABLISHED')]));
+   wire('MS05-039','then 8888');add(['cmd.exe',1288,0,'0:00:00','1,024 K']);},
+ function(){cap(3);wire('2pac.txt','via shell');add(['ftp.exe',1304,0,'0:00:00','1,612 K']);},
+ function(){cap(4);ns([IRC,FTPL].concat(scanRows(8),[row('203.0.113.17:1067','203.0.113.88:8888','ESTABLISHED'),row('203.0.113.17:33333','203.0.113.88:1071','ESTABLISHED')]));
+   wire('33333','haha.exe');drop('ftp.exe');add(['haha.exe',1316,0,'0:00:00','2,180 K']);},
+ function(){cap(5);wire('','');$('#wire').classList.add('hide');drop('haha.exe');drop('cmd.exe');add(['botzor.exe',1324,1,'0:00:00','2,436 K']);},
+ function(){cap(6);$('#L').style.opacity='.55';
+   BASE[0][2]=62;extra[extra.length-1][2]=37;tm('botzor.exe');$('#cpu').textContent='CPU Usage: 38%';}
+]);
+</script></body></html>

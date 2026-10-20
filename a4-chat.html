@@ -1,0 +1,72 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>irc - query DiablO</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ .stage{background:#1d2a36}
+ #w{left:70px;top:20px;width:1140px;height:640px;display:flex;flex-direction:column}
+ #term{flex:1;margin-top:2px;background:#000;display:flex;flex-direction:column;overflow:hidden;
+   font:18px/25px "Lucida Console","Courier New",monospace;color:#bbb}
+ #log{flex:1;min-height:0;overflow:hidden;padding:8px 12px 4px;display:flex;flex-direction:column;justify-content:flex-end;white-space:pre-wrap}
+ #log div{margin-top:3px}
+ .in .n{color:#55ffff}.in .t{color:#fff}
+ .out .n{color:#5f87d7}.out .t{color:#bbb}
+ .sys{color:#808080}
+ #bar{background:#0000a8;color:#fff;padding:1px 12px;white-space:pre}
+ #inp{padding:3px 12px 7px;color:#fff;white-space:pre-wrap;word-break:break-word;min-height:33px;max-height:84px;overflow:hidden}
+ #inp .c{display:inline-block;width:10px;height:19px;background:#bbb;vertical-align:-3px;animation:blink 1s steps(1) infinite}
+</style></head><body>
+<div class="stage">
+ <div class="win" id="w">
+  <div class="title"><i data-icon="cmd" class="ico"></i><span class="t">irc - query DiablO</span>
+   <b class="tbtn" data-g="min"></b><b class="tbtn" data-g="max"></b><b class="tbtn gap" data-g="x"></b></div>
+  <div id="term">
+   <div id="log"><div class="sys">*** Starting conversation with DiablO</div></div>
+   <div id="bar">[query: DiablO]   [DiablO is DiablO@elite]</div>
+   <div id="inp"><span id="typed"></span><span class="c"></span></div>
+  </div>
+ </div>
+ <div class="recon" style="left:70px;top:668px">Text as published by the Washington Post (Security Fix), 29 Aug 2005, "edited slightly for flow". The researcher's lines appeared as [msg(DiablO)] in the original. Window look is a reconstruction.</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/sim.js"></script>
+<script>
+// d = DiablO (arrives whole), t = the researcher (typed in the input line, then sent)
+var X=[
+ ['d','wht u think about this new worm? :o'],
+ ['t',"it is pretty good...the variables using the domain from email and then adding the 'www' in front is good. i would imagine you will get a lot of bots"],
+ ['d','soon adding logo of domaine :p'],
+ ['t','really? how are you going to do that?'],
+ ['d','yes'],
+ ['t','that would be interesting...just curious how you could do that...would be hard'],
+ ['d','i got more than 200 complaints in last dedicated server :p. i guess u too sent complaints'],
+ ['t','they are probably not going to send you any christmas presents. it is hard work cleaning up after getting infected with a worm like this. it costs money'],
+ ['d','no very easy. that worm spread only for money'],
+ ['t',"you should think about joining the other side of this...lots of fun fighting hackers...the thrill is even better. so, do you get paid for the 'click'?"],
+ ['d','no'],
+ ['t','how you make money then? i am confused...curious'],
+ ['d','it low setting of ie. so no need for click. ratio of install is 1:1. we dont care if user removed worm'],
+ ['t','oh, ok...that malware...toolbar thing!!  i understand now'],
+ ['d',';)']
+];
+var log=$('#log'),typed=$('#typed'),timer=null,pending=null;
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function post(x){
+  var d=document.createElement('div');
+  d.className=x[0]==='d'?'in':'out';
+  d.innerHTML=(x[0]==='d'?'<span class="n">[DiablO(DiablO@elite)]</span> ':'<span class="n">[msg(DiablO)]</span> ')+'<span class="t">'+esc(x[1])+'</span>';
+  log.appendChild(d);
+}
+// Finish whatever is still being typed, so two lines can never run at the same time.
+function finish(){if(pending){clearTimeout(timer);var x=pending;pending=null;typed.textContent='';post(x);}}
+function say(i,fast){
+  finish();
+  var x=X[i];
+  if(x[0]==='d'||fast){post(x);return;}
+  pending=x;var k=0;
+  (function t(){
+    if(pending!==x)return;
+    if(k<x[1].length){typed.textContent+=x[1].charAt(k++);timer=setTimeout(t,22);}
+    else timer=setTimeout(function(){if(pending===x){pending=null;typed.textContent='';post(x);}},450);
+  })();
+}
+scene(X.map(function(_,i){return function(f){say(i,f);};}));
+</script></body></html>

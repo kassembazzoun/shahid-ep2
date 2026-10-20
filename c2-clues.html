@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Text Scan - botzor.exe</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ #w{left:40px;top:14px;width:1200px;height:636px;display:flex;flex-direction:column}
+ .bar{display:flex;align-items:center;gap:6px;padding:6px 4px}
+ .bar .sunk{flex:1;height:21px;padding:4px 5px}
+ #list{flex:1;overflow:hidden;margin:0 4px}
+ #list table.lv td{font:17px/24px "Lucida Console","Courier New",monospace;padding:0 8px}
+ #list table.lv th{font-size:12px;position:sticky;top:0}
+ mark{background:transparent;color:inherit;transition:background .6s}
+ mark.on{background:#0A246A;color:#fff}
+ tr.dim td{color:#a0a0a0}
+ .status{margin:2px 4px 0}
+</style></head><body>
+<div class="stage">
+ <div class="win" id="w">
+  <div class="title"><i data-icon="hex" class="ico"></i><span class="t">Text Scan - botzor.exe</span>
+   <b class="tbtn" data-g="min"></b><b class="tbtn" data-g="max"></b><b class="tbtn gap" data-g="x"></b></div>
+  <div class="menubar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
+  <div class="bar">File to scan <div class="sunk">C:\samples\zotob\botzor.exe</div><span class="btn">Browse</span><span class="btn def">Go</span></div>
+  <div id="list" class="sunk sb"><table class="lv"><thead><tr><th style="width:110px">File pos</th><th style="width:40px">ID</th><th>Text</th></tr></thead><tbody id="rows"></tbody></table></div>
+  <div class="status"><div style="flex:3" id="st">Ready</div><div>ANSI</div></div>
+ </div>
+ <div class="recon" style="left:40px;top:660px">The two nicknames, as F-Secure noted after the arrests (Aug 2005). Reconstruction from antivirus write-ups; offsets illustrative.</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/strings.js"></script><script src="assets/sim.js"></script>
+<script>
+var S=BOTZOR_STRINGS.slice(26),rows=$('#rows'),pos=0x95D;
+S.forEach(function(s,i){
+  pos+=0x0A+s[0].length+((i*37)%23);
+  var tr=document.createElement('tr'),txt=s[0].replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace('Coder','<mark id="m1">Coder</mark>').replace('diabl0','<mark id="m2">diabl0</mark>');
+  tr.innerHTML='<td>'+pad(pos.toString(16).toUpperCase(),12)+'</td><td>A</td><td>'+txt+'</td>';rows.appendChild(tr);
+});
+scene([
+ function(){rows.querySelectorAll('tr').forEach(function(r){if(!r.querySelector('mark'))r.classList.add('dim');});},
+ function(){$('#m1').classList.add('on');$('#st').textContent='Find: Coder';},
+ function(){$('#m2').classList.add('on');$('#st').textContent='Find: diabl0';}
+]);
+</script></body></html>

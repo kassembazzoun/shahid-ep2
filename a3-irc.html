@@ -1,0 +1,97 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>mIRC</title>
+<link rel="stylesheet" href="assets/w2k.css">
+<style>
+ #m{left:0;top:0;width:1280px;height:690px;display:flex;flex-direction:column}
+ .tools{display:flex;gap:1px;padding:2px 2px 3px;border-bottom:1px solid #808080;box-shadow:0 1px #fff}
+ .tools i{width:24px;height:22px;display:inline-flex;align-items:center;justify-content:center}
+ .tools .sep{width:2px;margin:0 3px;box-shadow:inset 1px 0 #808080,inset -1px 0 #fff}
+ .switch{display:flex;gap:2px;padding:3px 2px}
+ .switch span{height:20px;padding:0 10px;display:flex;align-items:center;
+   box-shadow:inset -1px -1px #404040,inset 1px 1px #fff,inset -2px -2px #808080,inset 2px 2px #D4D0C8}
+ .switch span.on{box-shadow:inset 1px 1px #404040,inset -1px -1px #fff,inset 2px 2px #808080;font-weight:bold}
+ .mdi{flex:1;background:#808080;position:relative}
+ .child{position:absolute;display:flex;flex-direction:column}
+ .irc{font:16px/18px FSEX,"Lucida Console",monospace;background:#fff;color:#000;overflow:hidden;padding:2px 4px;white-space:pre-wrap;word-break:break-all}
+ .j{color:#009300}.n{color:#00007F}.r{color:#7F0000}.g{color:#7F7F7F}.me{color:#000}
+ .row{flex:1;display:flex;gap:2px;min-height:0}
+ #chan{flex:1}
+ #nicks{width:170px;font:16px/18px FSEX,"Lucida Console",monospace;background:#fff;overflow:hidden;padding:2px 4px}
+ .edit{height:22px;margin-top:2px;font:16px/18px FSEX,monospace;padding:2px 4px;background:#fff}
+</style></head><body>
+<div class="stage">
+ <div class="win" id="m">
+  <div class="title"><i data-icon="chat" class="ico"></i><span class="t" id="ttl">mIRC</span>
+   <b class="tbtn" data-g="min"></b><b class="tbtn" data-g="max"></b><b class="tbtn gap" data-g="x"></b></div>
+  <div class="menubar"><span><u>F</u>ile</span><span><u>V</u>iew</span><span>F<u>a</u>vorites</span><span><u>T</u>ools</span><span><u>C</u>ommands</span><span><u>W</u>indow</span><span><u>H</u>elp</span></div>
+  <div class="tools"><i data-icon="network"></i><i data-icon="computer"></i><span class="sep"></span><i data-icon="folder"></i><i data-icon="chat"></i><i data-icon="doc"></i><span class="sep"></span><i data-icon="notepad"></i><i data-icon="hex"></i></div>
+  <div class="switch"><span id="sw1" class="on">Status</span><span id="sw2" class="hide">#********</span></div>
+  <div class="mdi">
+   <div class="win child" id="status" style="left:10px;top:10px;width:640px;height:300px">
+    <div class="title"><span class="t">Status: ****** on diabl0.turkcoders.net (8080)</span><b class="tbtn" data-g="min"></b><b class="tbtn" data-g="max"></b><b class="tbtn gap" data-g="x"></b></div>
+    <div class="irc sunk sb" id="st" style="flex:1"></div>
+   </div>
+   <div class="win child hide" id="cw" style="left:40px;top:24px;width:1200px;height:520px">
+    <div class="title"><span class="t" id="ct">#******** [0]</span><b class="tbtn" data-g="min"></b><b class="tbtn" data-g="max"></b><b class="tbtn gap" data-g="x"></b></div>
+    <div class="row"><div class="irc sunk sb" id="chan"></div><div class="sunk sb" id="nicks"></div></div>
+    <input class="edit sunk" id="ed" autocomplete="off" spellcheck="false" style="border:0;outline:none;color:#000">
+   </div>
+  </div>
+ </div>
+ <div class="recon" style="left:12px;top:696px">Reconstruction. The server name is real (Zotob.A, Aug 2005). The channel name and nicknames were never published.</div>
+</div>
+<script src="assets/icons.js"></script><script src="assets/sim.js"></script>
+<script>
+var st=$('#st'),ch=$('#chan'),nk=$('#nicks'),bots=[];
+function L(box,html){var d=document.createElement('div');d.innerHTML=html;box.appendChild(d);box.scrollTop=box.scrollHeight;}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function stamp(){return '';} // mIRC 6 shipped with timestamps off
+var CC=['USA','USA','USA','GBR','USA','DEU','USA','CAN','USA','FRA','USA','NLD','USA','ITA','USA','BRA','USA','ESP','USA','AUS'];
+var n=0;
+function ident(i){var a='qwrtzpkmhdslxcvbnyfgj',o='',x=i*2654435761%4294967296;for(var k=0;k<5+(i%3);k++){o+=a.charAt(x%a.length);x=Math.floor(x/7)+i*31+k*17;}return o;}
+function nickFor(i){return '[2K|'+CC[i%CC.length]+'|'+pad((48211+i*7919)%99999,5)+']';}
+function join(fast){
+  var i=bots.length,nick=nickFor(i),ip='203.0.113.'+(14+((i*37)%220));
+  bots.push(nick);
+  L(ch,'<span class="j">'+stamp()+'* '+esc(nick)+' ('+ident(i)+'@'+ip+') has joined #********</span>');
+  drawNicks();
+}
+function drawNicks(){
+  var h='<div>@******</div>';bots.forEach(function(b){h+='<div>'+esc(b)+'</div>';});nk.innerHTML=h;
+  $('#ct').textContent='#******** ['+(bots.length+1)+']';
+  $('#ttl').textContent='mIRC - [#******** ['+(bots.length+1)+']]';
+}
+function joins(k,fast,gap,done){var c=0;(function one(){if(c++>=k){if(done)done();return;}join(fast);if(fast)one();else setTimeout(one,gap);})();}
+function sysinfo(f){
+  var up=[2,4,1,7,3,5,2,6,1];var c=0;
+  (function r(){if(c>=Math.min(bots.length,6))return;var b=bots[c];
+    L(ch,stamp()+'&lt;'+esc(b)+'&gt; <span class="r">[SYSINFO]</span> os: Windows 2000 (5.0, Build 2195) | cpu: '+[1700,2400,866,1800,1133,2000][c]+'MHz | ram: '+[256,512,256,384,512,256][c]+'MB | uptime: 0d 0h '+up[c]+'m');
+    c++;if(f)r();else setTimeout(r,420);})();
+}
+// Typing in the box and pressing Enter really posts to the (fake) channel.
+function send(f){
+  var v=$('#ed').value.trim();$('#ed').value='';if(!v)return;
+  L(ch,'<span class="me">&lt;@******&gt; '+esc(v)+'</span>');
+  if(/^[.!]?sysinfo$/i.test(v)&&bots.length)setTimeout(function(){sysinfo(f);},f?0:350);
+}
+$('#ed').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();send(false);}});
+scene([
+ function(f){ // connect
+   $('#ttl').textContent='mIRC - [Status: ****** on diabl0.turkcoders.net (8080)]';
+   addLines(st,[{html:'<span class="n">* Connecting to diabl0.turkcoders.net (8080)</span>'},
+     {html:'<span class="g">-</span>'},{html:'MOTD File is missing'},{html:'<span class="g">-</span>'},
+     {html:'<span class="n">* ****** sets mode: +i</span>'}],f,500);
+ },
+ function(f){ // channel opens, bots trickle in
+   show('#cw');show('#sw2');$('#sw1').className='';$('#sw2').className='on';$('#status').classList.add('inactive');
+   L(ch,'<span class="j">'+stamp()+'* Now talking in #********</span>');drawNicks();
+   joins(9,f,900);
+ },
+ function(f){ // operator asks every bot for its system info
+   typeText('#ed','.sysinfo',f,110,function(){setTimeout(function(){send(f);},f?0:500);});
+ },
+ function(f){ // the flood: more and more machines join
+   joins(30,f,260);
+ }
+]);
+</script></body></html>
